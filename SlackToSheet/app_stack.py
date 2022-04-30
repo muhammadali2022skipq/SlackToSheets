@@ -37,8 +37,6 @@ class SlackToSheetStack(Stack):
         user_data_queue = sqs_.Queue(
             self,
             "SlackToSheets_SlackUserDataQueue",
-            content_based_deduplication=True,
-            fifo=True,
             removal_policy=RemovalPolicy.DESTROY,
         )
         user_data_queue.grant_send_messages(ProducerLambda_Function)
