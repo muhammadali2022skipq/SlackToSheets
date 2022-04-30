@@ -44,7 +44,7 @@ def queueMessage(boto3_sqs_client, sqs_queue_name, user_data):
     queue_url_data = boto3_sqs_client.get_queue_url(
         QueueName=sqs_queue_name,
     )
-    queue_url = json.loads(queue_url_data)['QueueUrl']
+    queue_url = queue_url_data['QueueUrl']
     response = boto3_sqs_client.send_message(
         QueueUrl=queue_url,
         MessageBody=json.dumps(user_data),
