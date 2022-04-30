@@ -3,11 +3,14 @@ import os
 
 import aws_cdk as cdk
 
-from practice.practice_stack import PracticeStack
+from SlackToSheet.pipeline_stack import SlackToSheetStackPipelineStack
 
 
 app = cdk.App()
-PracticeStack(app, "PracticeStack",
+# Tags for book keeping
+cdk.Tags.of(app).add("cohort", "Orion")
+cdk.Tags.of(app).add("name", "MuhammadAliKhan")
+SlackToSheetStackPipelineStack(app, "SlackToSheetPipelineStack",
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
     # but a single synthesized template can be deployed anywhere.
