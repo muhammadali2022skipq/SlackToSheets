@@ -85,7 +85,7 @@ class SlackToSheetStackPipelineStack(Stack):
     # Function to create ShellStep
 
     def createShellSteps(self, id, source, commands_list, have_output: bool):
-        output = "SlackToSheet/cdk.out"if have_output else None
+        output = "cdk.out"if have_output else None
         steps = pipelines_.ShellStep(
             id=id,
             input=source,
