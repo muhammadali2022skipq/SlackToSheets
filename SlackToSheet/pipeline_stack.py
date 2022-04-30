@@ -29,7 +29,6 @@ class SlackToSheetStackPipelineStack(Stack):
             id="SynthStep",
             source=source,
             commands_list=[
-                "cd SlackToSheet/",
                 "pip install -r requirements.txt",
                 "npm install -g aws-cdk",
                 "cdk synth",
@@ -41,7 +40,6 @@ class SlackToSheetStackPipelineStack(Stack):
             id="Unit_Test_Step",
             source=source,
             commands_list=[
-                "cd SlackToSheet/",
                 "pip install pytest",
                 "pip install -r requirements.txt",
                 "npm install -g aws-cdk",
