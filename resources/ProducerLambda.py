@@ -1,8 +1,5 @@
-import imp
 import json
 import logging
-from pydoc import cli
-from urllib import response
 from custom_encoder import CustomEncoder
 import boto3 as b3_
 import os
@@ -44,12 +41,13 @@ def handler_name(event, context):
 
 
 def queueMessage(boto3_sqs_client, sqs_queue_name, user_data):
-    queue_url = boto3_sqs_client.get_queue_url(
+    queue_url_data = boto3_sqs_client.get_queue_url(
         QueueName=sqs_queue_name,
     )
+    queue_url = json.loads(queue_url_data)['QueueUrl']
     response = boto3_sqs_client.send_message(
         QueueUrl=queue_url,
-        MessageBody=user_data,
+        MessageBody=json.dumps(user_data),
     )
     return response
 
