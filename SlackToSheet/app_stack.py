@@ -44,13 +44,17 @@ class SlackToSheetStack(Stack):
         user_data_queue = sqs_.Queue(
             self,
             "SlackToSheets_SlackUserDataQueue",
+            visibility_timeout=Duration.seconds(30),
             removal_policy=RemovalPolicy.DESTROY,
         )
         user_data_queue.grant_send_messages(ProducerLambda_Function)
         user_data_queue.grant_consume_messages(ConsumerLambda_Function)
-        ProducerLambda_Function.add_environment(key="SQS_Queue_Name",value=user_data_queue.queue_name)
-        ConsumerLambda_Function.add_environment(key="SQS_Queue_Name",value=user_data_queue.queue_name)
-        ConsumerLambda_Function.add_event_source(event_.SqsEventSource(user_data_queue))
+        ProducerLambda_Function.add_environment(
+            key="SQS_Queue_Name", value=user_data_queue.queue_name)
+        ConsumerLambda_Function.add_environment(
+            key="SQS_Queue_Name", value=user_data_queue.queue_name)
+        ConsumerLambda_Function.add_event_source(
+            event_.SqsEventSource(user_data_queue))
 
     def create_lambda(self, id, asset, handler):
         lambda_Function = lambda_.Function(
