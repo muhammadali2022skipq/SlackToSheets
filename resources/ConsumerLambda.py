@@ -17,7 +17,8 @@ def handler_name(event, context):
     queue_url = queue_url_data['QueueUrl']
 
     response = client.receive_message(
-        QueueUrl=queue_url
+        QueueUrl=queue_url,
+        WaitTimeSeconds=10,
     )
     logger.info("******************message_start*****************")
     logger.info(response)
