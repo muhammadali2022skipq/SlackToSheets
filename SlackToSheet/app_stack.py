@@ -20,6 +20,12 @@ class SlackToSheetStack(Stack):
             'ProducerLambda.handler_name',
         )
 
+        ConsumerLambda_Function = self.create_lambda(
+            "SlackToSheets_ConsumerLambda",
+            './resources',
+            'ConsumerLambda.handler_name',
+        )
+
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_apigateway/README.html
         # Amazon API Gateway is a fully managed service that makes it easy for developers to publish, maintain, monitor, and secure APIs at any scale.
 
@@ -40,8 +46,9 @@ class SlackToSheetStack(Stack):
             removal_policy=RemovalPolicy.DESTROY,
         )
         user_data_queue.grant_send_messages(ProducerLambda_Function)
+        user_data_queue.grant_consume_messages(ConsumerLambda_Function)
         ProducerLambda_Function.add_environment(key="SQS_Queue_Name",value=user_data_queue.queue_name)
-        
+        ConsumerLambda_Function.add_environment(key="SQS_Queue_Name",value=user_data_queue.queue_name)
 
     def create_lambda(self, id, asset, handler):
         lambda_Function = lambda_.Function(
