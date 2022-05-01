@@ -1,6 +1,6 @@
 import logging
 import json
-import aws_cdk as cdk_
+import boto3 as b3_
 from custom_encoder import CustomEncoder
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
@@ -12,6 +12,7 @@ logger.setLevel(logging.INFO)
 def handler_name(event, context):
 
     scopes = ["https://www.googleapis.com/auth/drive"]
+    client = b3_.client('secretsmanager')
 
    # GoogleDriveAPIURL = "https://www.googleapis.com/drive/v3/files?key={Google_Drive_API_Key}".format(
     #    Google_Drive_API_Key=GoogleDriveAPIKey)
@@ -20,8 +21,11 @@ def handler_name(event, context):
     #    "Authorization": "Bearer MYREALLYLONGTOKENIGOT"
     # }
     try:
-        json_keys = json.loads(
-            cdk_.SecretValue.secrets_manager("google-api-json-key"))
+        secret_key = client.get_secret_value(
+            SecretId="google-api-json-key",
+        )
+        json_keys = json.loads(secret_key['SecretString'])
+
         creds = Credentials.from_authorized_user_info(json_keys, scopes)
         service = build('sheets', 'v4', credentials=creds)
         sheet = service.spreadsheets()
