@@ -62,7 +62,7 @@ class SlackToSheetStack(Stack):
             id=id,
             code=lambda_.Code.from_asset(asset),
             handler=handler,
-            runtime=lambda_.Runtime.PYTHON_3_6,
+            runtime=lambda_.Runtime.PYTHON_3_9,
             timeout=Duration.seconds(30),
         )
         lambda_Function.apply_removal_policy(RemovalPolicy.DESTROY)
