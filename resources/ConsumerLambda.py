@@ -1,35 +1,32 @@
 import logging
 import boto3 as b3_
-import os
+import json
+from custom_encoder import CustomEncoder
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
 def handler_name(event, context):
+    try:
+        logger.info("******************event_start*****************")
+        logger.info(event)
+        logger.info("******************event_end*****************")
+        return buildResponse(200, event)
+    except:
+        raise Exception("ERROR:Consumer Lambda failed to consume event")
 
-    raise Exception("ERROR")
-    # try:
-    #     logger.info("******************event_start*****************")
-    #     logger.info(event)
-    #     logger.info("******************event_end*****************")
-    # except:
-    #     logger.info("ERROR")
 
+def buildResponse(statusCode, body=None):
+    # Creating response to return to client
+    response = {
+        "statusCode": statusCode,
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        }
+    }
+    if body is not None:
+        response['body'] = json.dumps(body, cls=CustomEncoder)
 
-    # sqs_queue_name = os.getenv("SQS_Queue_Name")
-    # client = b3_.client('sqs')
-    # queue_url_data = client.get_queue_url(
-    #     QueueName=sqs_queue_name,
-    # )
-    # queue_url = queue_url_data['QueueUrl']
-    
-    # response = client.receive_message(
-    #     QueueUrl=queue_url,
-    #     WaitTimeSeconds=10,
-    #     MaxNumberOfMessages=1,
-    #     VisibilityTimeout=30,
-    # )
-    # logger.info("******************message_start*****************")
-    # logger.info(response)
-    # logger.info("******************message_end*****************")
+    return response
