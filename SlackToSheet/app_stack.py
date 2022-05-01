@@ -80,6 +80,8 @@ class SlackToSheetStack(Stack):
                 iam_.ManagedPolicy.from_aws_managed_policy_name(
                     "SecretsManagerReadWrite"),
 
+                iam_.ManagedPolicy.from_aws_managed_policy_name(
+                    "CloudWatchFullAccess"),
             ],
         )
         lambda_role.apply_removal_policy(RemovalPolicy.DESTROY)
