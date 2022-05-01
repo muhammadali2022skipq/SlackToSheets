@@ -19,6 +19,8 @@ def handler_name(event, context):
     response = client.receive_message(
         QueueUrl=queue_url,
         WaitTimeSeconds=10,
+        MaxNumberOfMessages=1,
+        VisibilityTimeout=60,
     )
     logger.info("******************message_start*****************")
     logger.info(response)
