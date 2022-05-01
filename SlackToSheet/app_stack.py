@@ -3,6 +3,7 @@ from aws_cdk import (
     Stack,
     aws_sqs as sqs_,
     aws_lambda as lambda_,
+    aws_lambda_event_sources as event_,
     RemovalPolicy,
     Duration,
 )
@@ -49,6 +50,7 @@ class SlackToSheetStack(Stack):
         user_data_queue.grant_consume_messages(ConsumerLambda_Function)
         ProducerLambda_Function.add_environment(key="SQS_Queue_Name",value=user_data_queue.queue_name)
         ConsumerLambda_Function.add_environment(key="SQS_Queue_Name",value=user_data_queue.queue_name)
+        ConsumerLambda_Function.add_event_source(event_.SqsEventSource(user_data_queue))
 
     def create_lambda(self, id, asset, handler):
         lambda_Function = lambda_.Function(
