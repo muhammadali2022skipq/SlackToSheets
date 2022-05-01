@@ -16,20 +16,20 @@ class SlackToSheetStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-      #  lamdaRoles = self.create_lamba_role()
+        lamdaRoles = self.create_lamba_role()
         ProducerLambda_Function = self.create_lambda(
             "SlackToSheets_ProducerLambda",
             './resources',
             'ProducerLambda.handler_name',
+            lamdaRoles
         )
 
         ConsumerLambda_Function = self.create_lambda(
             "SlackToSheets_ConsumerLambda",
             './resources',
             'ConsumerLambda.handler_name',
+            lamdaRoles
         )
-        secret_value_role = self.create_lamba_role()
-        ConsumerLambda_Function.add_to_role_policy(secret_value_role)
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_apigateway/README.html
         # Amazon API Gateway is a fully managed service that makes it easy for developers to publish, maintain, monitor, and secure APIs at any scale.
 
@@ -59,7 +59,7 @@ class SlackToSheetStack(Stack):
         ConsumerLambda_Function.add_event_source(
             event_.SqsEventSource(user_data_queue))
 
-    def create_lambda(self, id, asset, handler, ):
+    def create_lambda(self, id, asset, handler, roles):
         lambda_Function = lambda_.Function(
             self,
             id=id,
@@ -67,6 +67,7 @@ class SlackToSheetStack(Stack):
             handler=handler,
             runtime=lambda_.Runtime.PYTHON_3_6,
             timeout=Duration.seconds(30),
+            role=roles,
         )
         lambda_Function.apply_removal_policy(RemovalPolicy.DESTROY)
         return lambda_Function
