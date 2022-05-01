@@ -28,7 +28,8 @@ class SlackToSheetStack(Stack):
             './resources',
             'ConsumerLambda.handler_name',
         )
-
+        secret_value_role = self.create_lamba_role()
+        ConsumerLambda_Function.add_to_role_policy(secret_value_role)
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_apigateway/README.html
         # Amazon API Gateway is a fully managed service that makes it easy for developers to publish, maintain, monitor, and secure APIs at any scale.
 
@@ -70,17 +71,17 @@ class SlackToSheetStack(Stack):
         lambda_Function.apply_removal_policy(RemovalPolicy.DESTROY)
         return lambda_Function
 
-    # def create_lamba_role(self):
-    #     lambda_role = iam_.Role(
-    #         self,
-    #         "SlackToSheets_IAM_Roles",
-    #         assumed_by=iam_.ServicePrincipal("lambda.amazonaws.com"),
-    #         managed_policies=[
+    def create_lamba_role(self):
+        lambda_role = iam_.Role(
+            self,
+            "SlackToSheets_IAM_Roles",
+            assumed_by=iam_.ServicePrincipal("lambda.amazonaws.com"),
+            managed_policies=[
 
-    #             iam_.ManagedPolicy.from_aws_managed_policy_name(
-    #                 "SecretsManagerReadWrite"),
+                iam_.ManagedPolicy.from_aws_managed_policy_name(
+                    "SecretsManagerReadWrite"),
 
-    #         ],
-    #     )
-    #     lambda_role.apply_removal_policy(RemovalPolicy.DESTROY)
-    #     return lambda_role
+            ],
+        )
+        lambda_role.apply_removal_policy(RemovalPolicy.DESTROY)
+        return lambda_role

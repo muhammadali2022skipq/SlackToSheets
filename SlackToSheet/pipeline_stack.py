@@ -14,7 +14,7 @@ class SlackToSheetStackPipelineStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.pipelines.html
-
+        
         # Source step (Github)
         source = self.createSource(
             repo="muhammadali2022skipq/SlackToSheets",
@@ -84,7 +84,6 @@ class SlackToSheetStackPipelineStack(Stack):
         )
         return create_source
     # Function to create ShellStep
-
     def createShellSteps(self, id, source, commands_list, have_output: bool):
         output = "cdk.out"if have_output else None
         steps = pipelines_.ShellStep(
