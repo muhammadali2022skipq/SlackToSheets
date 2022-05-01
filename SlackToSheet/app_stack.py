@@ -41,20 +41,11 @@ class SlackToSheetStack(Stack):
         printData.add_method("GET")
         printData.add_method("POST")
 
-        dead_letter_queue = sqs_.Queue(
-            self,
-            "SlackToSheets_SlackUserData_DeadLetterQueue"
-        )
-
         user_data_queue = sqs_.Queue(
             self,
             "SlackToSheets_SlackUserDataQueue",
             visibility_timeout=Duration.seconds(30),
-            delivery_delay=Duration.minutes(1),
-            dead_letter_queue=sqs_.DeadLetterQueue(
-                queue=dead_letter_queue,
-                max_receive_count=1,
-            ),
+            delivery_delay=Duration.seconds(30),
             removal_policy=RemovalPolicy.DESTROY,
         )
 
