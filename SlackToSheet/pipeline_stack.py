@@ -30,7 +30,6 @@ class SlackToSheetStackPipelineStack(Stack):
             source=source,
             commands_list=[
                 "pip install -r requirements.txt",
-                "pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib --target=SlackToSheet/",
                 "npm install -g aws-cdk",
                 "cdk synth",
             ],
