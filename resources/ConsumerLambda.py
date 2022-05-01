@@ -15,13 +15,13 @@ def handler_name(event, context):
         QueueName=sqs_queue_name,
     )
     queue_url = queue_url_data['QueueUrl']
-
-    response = client.receive_message(
-        QueueUrl=queue_url,
-        WaitTimeSeconds=10,
-        MaxNumberOfMessages=1,
-        VisibilityTimeout=60,
-    )
-    logger.info("******************message_start*****************")
-    logger.info(response)
-    logger.info("******************message_end*****************")
+    while True:
+        response = client.receive_message(
+            QueueUrl=queue_url,
+            WaitTimeSeconds=10,
+            MaxNumberOfMessages=1,
+            VisibilityTimeout=30,
+        )
+        logger.info("******************message_start*****************")
+        logger.info(response)
+        logger.info("******************message_end*****************")
