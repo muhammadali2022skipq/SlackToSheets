@@ -26,6 +26,7 @@ def handler_name(event, context):
     logger.info(secret_key)
     json_keys = json.loads(secret_key['SecretString'])
     logger.info(json_keys)
+    return buildResponse(200,event)
 
     # creds = Credentials.from_authorized_user_info(json_keys, scopes)
     # service = build('sheets', 'v4', credentials=creds)

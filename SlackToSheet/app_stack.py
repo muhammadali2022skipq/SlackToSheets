@@ -47,8 +47,6 @@ class SlackToSheetStack(Stack):
         user_data_queue = sqs_.Queue(
             self,
             "SlackToSheets_SlackUserDataQueue",
-            visibility_timeout=Duration.seconds(60),
-            delivery_delay=Duration.seconds(30),
             removal_policy=RemovalPolicy.DESTROY,
         )
 
