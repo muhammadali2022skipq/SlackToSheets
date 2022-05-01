@@ -26,7 +26,8 @@ def handler_name(event, context):
     )
     json_keys = json.loads(secret_key['SecretString'])
     logger.info(json_keys)
-    creds = ServiceAccountCredentials.from_json(json_keys, scopes)
+    creds = ServiceAccountCredentials.from_json_keyfile_name(
+        json_keys, scopes=scopes)
     logger.info("CREDS BELOW")
     logger.info(creds)
     service = build('sheets', 'v4', credentials=creds)
