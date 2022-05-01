@@ -2,7 +2,7 @@ import logging
 import json
 import boto3 as b3_
 from custom_encoder import CustomEncoder
-from google.oauth2.credentials import Credentials
+from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient.discovery import build
 
 logger = logging.getLogger()
@@ -26,9 +26,10 @@ def handler_name(event, context):
     logger.info(secret_key)
     json_keys = json.loads(secret_key['SecretString'])
     logger.info(json_keys)
-    return buildResponse(200,event)
+    creds = ServiceAccountCredentials.from_json(json_keys, scopes)
+    logger.info(creds)
+    return buildResponse(200, event)
 
-    # creds = Credentials.from_authorized_user_info(json_keys, scopes)
     # service = build('sheets', 'v4', credentials=creds)
     # sheet = service.spreadsheets()
     # spreadsheet = {
