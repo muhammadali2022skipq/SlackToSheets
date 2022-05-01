@@ -10,7 +10,7 @@ logger.setLevel(logging.INFO)
 
 
 def handler_name(event, context):
-
+    logger.info(event)
     scopes = ["https://www.googleapis.com/auth/drive"]
     client = b3_.client('secretsmanager')
 
