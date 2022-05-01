@@ -45,13 +45,16 @@ class SlackToSheetStack(Stack):
             self,
             "SlackToSheets_SlackUserDataQueue",
             visibility_timeout=Duration.seconds(30),
+            dead_letter_queue=sqs_.DeadLetterQueue(
+                max_receive_count=1,
+                queue=user_data_queue
+            ),
+            receive_message_wait_time=Duration.minutes(1),
             removal_policy=RemovalPolicy.DESTROY,
         )
         user_data_queue.grant_send_messages(ProducerLambda_Function)
         user_data_queue.grant_consume_messages(ConsumerLambda_Function)
         ProducerLambda_Function.add_environment(
-            key="SQS_Queue_Name", value=user_data_queue.queue_name)
-        ConsumerLambda_Function.add_environment(
             key="SQS_Queue_Name", value=user_data_queue.queue_name)
         ConsumerLambda_Function.add_event_source(
             event_.SqsEventSource(user_data_queue))

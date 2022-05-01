@@ -7,9 +7,13 @@ logger.setLevel(logging.INFO)
 
 
 def handler_name(event, context):
-    logger.info("******************event_start*****************")
-    logger.info(event)
-    logger.info("******************event_end*****************")
+    try:
+        logger.info("******************event_start*****************")
+        logger.info(event)
+        logger.info("******************event_end*****************")
+    except:
+        logger.info("ERROR")
+
 
     # sqs_queue_name = os.getenv("SQS_Queue_Name")
     # client = b3_.client('sqs')
