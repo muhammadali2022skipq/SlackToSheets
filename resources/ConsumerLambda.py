@@ -20,27 +20,24 @@ def handler_name(event, context):
     # headers = {
     #    "Authorization": "Bearer MYREALLYLONGTOKENIGOT"
     # }
-    try:
-        secret_key = client.get_secret_value(
-            SecretId="google-api-json-key",
-        )
-        json_keys = json.loads(secret_key['SecretString'])
 
-        creds = Credentials.from_authorized_user_info(json_keys, scopes)
-        service = build('sheets', 'v4', credentials=creds)
-        sheet = service.spreadsheets()
-        spreadsheet = {
-            'properties': {
-                'title': "Testing "
-            }
+    secret_key = client.get_secret_value(
+        SecretId="google-api-json-key",
+    )
+    json_keys = json.loads(secret_key['SecretString'])
+
+    creds = Credentials.from_authorized_user_info(json_keys, scopes)
+    service = build('sheets', 'v4', credentials=creds)
+    sheet = service.spreadsheets()
+    spreadsheet = {
+        'properties': {
+            'title': "Testing "
         }
-        response = sheet.create(body=spreadsheet).execute()
-        logger.info("**&&&&&&&&&&&&&&&&&&&&&&&&")
-        logger.info(response)
-        logger.info("**&&&&&&&&&&&&&&&&&&&&&&&&")
-        return buildResponse(200, event)
-    except:
-        raise Exception("ERROR:Consumer Lambda failed to consume event")
+    }
+    response = sheet.create(body=spreadsheet).execute()
+    logger.info("**&&&&&&&&&&&&&&&&&&&&&&&&")
+    logger.info(response)
+    logger.info("**&&&&&&&&&&&&&&&&&&&&&&&&")
 
 
 def buildResponse(statusCode, body=None):
