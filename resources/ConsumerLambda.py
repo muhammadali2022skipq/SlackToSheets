@@ -20,17 +20,18 @@ def handler_name(event, context):
     # headers = {
     #    "Authorization": "Bearer MYREALLYLONGTOKENIGOT"
     # }
+
     secret_key = client.get_secret_value(
         SecretId="google-api-json-key",
     )
-    logger.info(secret_key)
     json_keys = json.loads(secret_key['SecretString'])
     logger.info(json_keys)
     creds = ServiceAccountCredentials.from_json(json_keys, scopes)
+    logger.info("CREDS BELOW")
     logger.info(creds)
+    service = build('sheets', 'v4', credentials=creds)
     return buildResponse(200, event)
 
-    # service = build('sheets', 'v4', credentials=creds)
     # sheet = service.spreadsheets()
     # spreadsheet = {
     #     'properties': {
