@@ -25,11 +25,37 @@ def handler_name(event, context):
     logger.info("CREDS BELOW")
     logger.info(creds)
 
-    sheets = build('sheets', 'v4', credentials=creds, cache_discovery=False)
+    service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
+    sheet = service.spreadsheets()
 
-    logger.info(json.loads(event['Records'][0]['body'])['event']['user'])
+    userData = json.loads(event['Records'][0]['body'])['event']['user']
 
-    return buildResponse(200, event)
+    if not userData['is_admin'] and not userData['is_bot'] and not userData['is_owner']:
+        values = [
+            [
+                userData['id'],
+                userData['profile']['first_name'],
+                userData['profile']['last_name'],
+                userData['profile']['email'],
+
+            ],
+            # Additional rows ...
+        ]
+        body = {
+            'values': values
+        }
+        range_name = "A1:D1"
+        request = sheet.values().append(
+            spreadsheetId=spread_id,    
+            range=range_name,
+            includeValuesInResponse=True,
+            insertDataOption="INSERT_ROWS",
+            valueInputOption="RAW",
+            body=body
+        )
+        response = request.execute()
+        logger.info(response)
+    return buildResponse(200, response)
 
     # Method to authorize google api using OAuth2.0
     # creds = Credentials.from_authorized_user_info(
