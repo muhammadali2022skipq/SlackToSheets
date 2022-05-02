@@ -30,19 +30,19 @@ def handler_name(event, context):
         keyfile_dict=json_keys, scopes=scopes)
     logger.info("CREDS BELOW")
     logger.info(creds)
-    service = build('sheets', 'v4', credentials=creds)
-    return buildResponse(200, event)
+    service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
 
-    # sheet = service.spreadsheets()
-    # spreadsheet = {
-    #     'properties': {
-    #         'title': "Testing "
-    #     }
-    # }
-    # response = sheet.create(body=spreadsheet).execute()
-    # logger.info("**&&&&&&&&&&&&&&&&&&&&&&&&")
-    # logger.info(response)
-    # logger.info("**&&&&&&&&&&&&&&&&&&&&&&&&")
+    sheet = service.spreadsheets()
+    spreadsheet = {
+        'properties': {
+            'title': "Testing "
+        }
+    }
+    response = sheet.create(body=spreadsheet).execute()
+    logger.info("**&&&&&&&&&&&&&&&&&&&&&&&&")
+    logger.info(response)
+    logger.info("**&&&&&&&&&&&&&&&&&&&&&&&&")
+    return buildResponse(200, event)
 
 
 def buildResponse(statusCode, body=None):
