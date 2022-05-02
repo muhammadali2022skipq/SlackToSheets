@@ -28,7 +28,7 @@ def handler_name(event, context):
     json_keys = json.loads(secret_key['SecretString'])
     logger.info(json_keys)
     creds = Credentials.from_authorized_user_info(
-        info=json_keys, scopes=scopes)
+        info=json_keys['web'], scopes=scopes)
 
     logger.info("CREDS BELOW")
     logger.info(creds)
