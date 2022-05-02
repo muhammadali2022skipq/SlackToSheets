@@ -3,6 +3,7 @@ import json
 import boto3 as b3_
 from custom_encoder import CustomEncoder
 from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
 logger = logging.getLogger()
@@ -22,26 +23,19 @@ def handler_name(event, context):
     # }
 
     secret_key = client.get_secret_value(
-        SecretId="google-api-json-key",
+        SecretId="google-api-json-key-https",
     )
     json_keys = json.loads(secret_key['SecretString'])
     logger.info(json_keys)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(
-        keyfile_dict=json_keys, scopes=scopes)
+    creds = Credentials.from_authorized_user_info(
+        info=json_keys, scopes=scopes)
+
     logger.info("CREDS BELOW")
     logger.info(creds)
-    service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
+    # creds = ServiceAccountCredentials.from_json_keyfile_dict(
+    #     keyfile_dict=json_keys, scopes=scopes)
+    # sheets = build('sheets', 'v4', credentials=creds, cache_discovery=False)
 
-    sheet = service.spreadsheets()
-    spreadsheet = {
-        'properties': {
-            'title': "Testing "
-        }
-    }
-    response = sheet.create(body=spreadsheet).execute()
-    logger.info("**&&&&&&&&&&&&&&&&&&&&&&&&")
-    logger.info(response)
-    logger.info("**&&&&&&&&&&&&&&&&&&&&&&&&")
     return buildResponse(200, event)
 
 
