@@ -19,7 +19,6 @@ class SlackToSheetStack(Stack):
         lamdaRoles = self.create_lamba_role()
         ProducerLambda_Function = self.create_lambda(
             "SlackToSheets_ProducerLambda",
-            "pip install google-api-python-client oauth2client -t resources/"
             './resources',
             'ProducerLambda.handler_name',
             lamdaRoles
