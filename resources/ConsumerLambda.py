@@ -27,6 +27,8 @@ def handler_name(event, context):
 
     sheets = build('sheets', 'v4', credentials=creds, cache_discovery=False)
 
+    logger.info(json.loads(event['Records'][0]['body'])['event']['user'])
+
     return buildResponse(200, event)
 
     # Method to authorize google api using OAuth2.0
